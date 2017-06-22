@@ -1,0 +1,18 @@
+		;The		entry point of this program
+main		MOV		R5, #1       ;Do stuff...
+		BL		function1    ;Call function1
+		END
+		
+		;This	is just a function shell for a function that calls another function
+function1	STMFD	r13!, {r14}  ;Store the return address
+		;..do	something
+		BL		function2    ;Call function2
+		;..do	something
+		LDMFD	r13!, {r14}  ;Restore the return address from the stack
+		MOV		pc, r14      ;Return to the calling function
+		
+		;This	function does not call any other function, so just don’t disturb r14 return address
+function2	SUB		r1, r0, #'A'
+		CMP		r1, #'Z' - 'A'
+		ADDLS	r0, r0, #'a' - 'A'
+		MOV		pc, r14

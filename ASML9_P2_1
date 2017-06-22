@@ -1,0 +1,25 @@
+numbers	DCD		34, 54, 21
+largest	DCD		0
+		
+main		LDR		r4, =numbers	;Memory addr to load numbers from
+		LDR		r0, [r4], #4	;N1
+		LDR		r1, [r4], #4	;N2
+		LDR		r2, [r4]		;N3
+		LDR		r4, =largest	;No longer required to remember the numbers addr so replace w/ largest addr
+		BL		func1		;save link (r14) and move to func1
+		END					;terminate
+		
+func1	CMP		r0, r1		;N1 > N2 ( ? )
+		BCS		greater1		;N1 > N2 (yes) go to greater1		
+		CMP		r2, r1		;else N3 > N2 ( ? )
+		BCS		greater2		;N3 > N2		(yes) go to greater2
+		STR		r1, [r4]		;else N2 is the largest, store it
+		MOV		pc, r14		;return to linked instruction in main (r14)
+		
+greater1	CMP		r2, r0		;N3 > N1 ( ? )
+		BCS		greater2		;N3 > N1 (yes)
+		STR		r0, [r4]		;else N1 is largest, store it
+		MOV		pc, r14		;return to linked instruction in main (r14)
+		
+greater2	STR		r2, [r4]		;N3 is the largest, store it
+		MOV		pc, r14		;return to linked instruction in main (r14)

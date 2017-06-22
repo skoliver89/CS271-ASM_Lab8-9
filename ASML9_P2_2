@@ -1,0 +1,25 @@
+fibinput	DCD		16
+fibnumber	DCD		0
+		
+main		LDR		r4, =fibinput
+		LDR		r5, =fibnumber
+		LDR		r0, [r4]
+		BL		fib		  ;change link addr to next line, do fib
+		END
+		
+fib		STMFD	r13!, {r14} ;push addr to stack
+		CMP		r0, #1	  ; n == 1 ??
+		BNE		rec		  ; no?
+		MOV		r1, #0	  ; fibN^0 = 0
+		MOV		r2, #1	  ; fibN^1 = 1
+		LDMFD	r13!, {pc}  ; start calc section of rec
+		B		endfib	  ; do endFib
+		
+rec		SUB		r0, r0, #1  ; count down
+		BL		fib		  ; change link addr to next line, do fib
+		ADD		r3, r1, r2  ; calc currFib
+		MOV		r1, r2	  ; n-1 -> n-2
+		MOV		r2, r3	  ; currFib -> n-1
+		
+endfib	STR		r3, [r5]	  ; store the currFib
+		LDMFD	r13!, {pc}  ; move to next addr in stack

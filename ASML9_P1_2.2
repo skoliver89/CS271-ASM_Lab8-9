@@ -1,0 +1,26 @@
+		;Here	is an example recursive function for doing multiplication using the ADD instruction:
+		;The		entry point of this program
+main		MOV		r0, #13       ;Set parameter 0
+		MOV		r1, #10       ;Set parameter 1
+		
+		BL		mult          ;Call function1
+		END
+		
+		;Function	MULT
+		;recursive	multiplication using only addition
+mult		STMFD	r13!, {r14}  ;Store the return address
+		;if		r1 == 0 return 0
+		CMP		r1, #0
+		BNE		else1
+		MOV		r3, #0
+		B		endMult
+		
+		;else	r3 = mult( r0, r1 -1) + r0
+else1	SUB		r1, r1, #1
+		BL		mult   ;Call function2
+		;Get		the result and add setting return value
+		ADD		r3, r3, r0
+		
+		;return
+endMult	LDMFD	r13!, {r14}  ;Restore the return address from the stack
+		MOV		pc, r14        ;Return to the calling function

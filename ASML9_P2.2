@@ -1,0 +1,26 @@
+fibs		DCD		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ;fib MEM storage
+		
+main		LDR		r4, =fibs	;Memory addr for (n-1)
+		LDR		r5, =fibs ;Memory addr for (n-2)
+		MOV		r0, #2	;counter for fib recursion
+		LDR		r1, [r4, #4]!	;(N-1)
+		LDR		r2, [r5], #4	;(N-2)
+		ADD		r4, r4, #4	;Correct the addr for n-2
+		BL		fib			;Main func return linkage
+		ADD		r1, r1, r2	;Do the last add and store in main so not...
+		STR		r1, [r4]		;to create extranious allocation of storage.
+		END		;Terminate Program
+		
+fib		STMFD	r13!, {r14} ;Store return addr
+		CMP		r0, #15	  ;Are we on the last one?
+		BNE		recurs	  ;No, then perform recursion
+		B		endFib	  ;Yes, then finish recursion and move to endFib
+		
+recurs	ADD		r0, r0, #1	;Increment the counter
+		BL		fib			;Link back to fib
+		ADD		r1, r1, r2	;Calc the fib number
+		STR		r1, [r4], #4	;move to (n-1) for next fib
+		LDR		r2, [r5], #4	;mobe to (n-2) for next fib
+		
+endFib	LDMFD	r13!, {r14} ;Restore return addr from stack
+		MOV		pc, r14	  ;Return to calling func
