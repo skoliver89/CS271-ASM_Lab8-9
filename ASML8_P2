@@ -1,0 +1,24 @@
+numbers	DCD		34, 54, 21
+biggest	DCD		0
+		
+		LDR		r0, =numbers
+		LDR		r4, =biggest
+		LDR		r1, [r0], #4
+		LDR		r2, [r0], #4
+		LDR		r3, [r0]
+		
+		CMP		r1, r2
+		BCS		greater1
+		
+		CMP		r3, r2
+		BCS		greater2
+		STR		r2, [r4]
+		END
+		
+greater1	CMP		r3, r1
+		BCS		greater2
+		STR		r1, [r4]
+		END
+		
+greater2	STR		r3, [r4]
+		END

@@ -1,0 +1,18 @@
+		ldr		r0, =fibs	;load MEM ADDR for prev fibs
+		ldr		r1, =fibs ;load MEM ADDR for curr fib/storage func
+		MOV		r4, #2	;counter for fib loop
+		
+		ldr		r2, [r0], #4	;REG for prev fib
+		ldr		r3, [r1, #4]! 	;REG for curr fib
+		ADD		r1, r1, #4	;correct r1 ADDR
+		
+fib		ADD		r3, r2, r3	;calc next fib
+		str		r3, [r1], #4
+		ldr		r2, [r0], #4
+		ADD		r4, r4, #1	;INC counter
+		CMP		r4, #25		;check if we are done
+		BNE		fib
+		
+		
+fibs		DCD		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		END
